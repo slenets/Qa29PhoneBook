@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'com.telran'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'org.testng:testng:7.1.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+test {
+    useTestNG()
+}
