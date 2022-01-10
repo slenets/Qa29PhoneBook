@@ -1,12 +1,14 @@
 package application;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.lang.model.element.Element;
+import java.util.concurrent.TimeUnit;
 
 public class HelperBase {
     WebDriver wd;
@@ -24,9 +26,13 @@ public class HelperBase {
     }
 
     public void click(By selector) {
-        wd.findElement(selector).click();
-//        WebElement element = new WebDriverWait(wd, 5).until(ExpectedConditions.visibilityOf(wd.findElement(selector)));
-//        element.click();
+//        wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+//        wd.findElement(selector).click();
+        WebElement element = wd.findElement(selector);
+
+       wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+            element.click();
+
     }
 
     public void typeTextbox(By selector, String input) {

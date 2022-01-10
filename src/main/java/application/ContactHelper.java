@@ -7,7 +7,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ContactHelper extends HelperBase {
     public ContactHelper(WebDriver wd) {
@@ -28,25 +31,25 @@ public class ContactHelper extends HelperBase {
         return wd.findElement(By.xpath("//h3[text()='" + text + "']")).isDisplayed();
     }
 
-    public boolean containsContact() {
-        return wd.findElements(By.className("contact-item_card__2SOIM")).size() > 0;
+    public WebElement containsContact() {
+        List<WebElement> els = wd.findElements(By.className("contact-item_card__2SOIM"));
+        return els.remove(0);
     }
 
     public void removeContact() {
-        if (containsContact()) {
-            click(By.className("contact-item_card__2SOIM"));
+            containsContact().click();
             click(By.xpath("//button[text()='Remove']"));
         }
 //        JavascriptExecutor js = (JavascriptExecutor) wd;
 //        js.executeScript("document.querySelector('.contact-item_card__2SOIM').click();")
-    }
 
     public void deleteAllContacts(){
 
-        while (containsContact()){
+        while (containsContact() != null){
             removeContact();
-            pause(1000);
         }
+
+
 
 
 //        while(wd.findElement(By.className("contact-item_card__2SOIM")).isDisplayed()){

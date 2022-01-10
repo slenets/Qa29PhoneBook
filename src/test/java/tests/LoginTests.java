@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 public class LoginTests extends TestBase {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void precondition(){
         if(app.helper().isLogged()){
             app.helper().signOut();
@@ -17,7 +17,8 @@ public class LoginTests extends TestBase {
     }
 
     //Positive login
-    @Test
+
+    @Test(groups = {"web"})
     public void loginSuccess() {
         //Lombok uses
         User user = User.builder().email("a1@b1.ru").password("AAbb3'$'").build();
