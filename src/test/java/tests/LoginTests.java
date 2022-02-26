@@ -3,11 +3,11 @@ package tests;
 import models.User;
 import org.openqa.selenium.By;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class LoginTests extends TestBase {
+
 
     @BeforeMethod(alwaysRun = true)
     public void precondition(){
@@ -55,13 +55,6 @@ public class LoginTests extends TestBase {
         Assert.assertTrue(app.helper().isElementPresent(By.xpath("//*[text()='Login Failed with code 400']"),
                 "Login Failed with code 400"));
     }
-
-//    @AfterMethod
-//    public void postCondition(){
-//        if(app.helper().isElementPresent(By.xpath("//*[text()='Sign Out']"), "Sign Out")) {
-//            app.helper().signOut();
-//        }
-//    }
 
 
 }

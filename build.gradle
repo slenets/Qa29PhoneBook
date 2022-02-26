@@ -10,6 +10,11 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    implementation 'io.rest-assured:rest-assured:4.4.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+
     implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     implementation 'org.testng:testng:7.1.0'
 
@@ -28,14 +33,27 @@ test {
 
 task reg(type: Test){
     useTestNG{
+
+        def groups = System.getProperty('groups')
+        if (groups != null) {
+            includeGroups groups
+        }
+
         def suite = System.getProperty('suite', '')
         if (suite.equals('regng')) {
             suites 'src/test/resources/regng.xml'
         } else if (suite.equals('smoke')) {
             suites 'src/test/resources/smoke.xml'
+        } else if(suite.equals('loginng')){
+            suites 'src/test/resources/loginng.xml'
         } else {
             suites 'src/test/resources/testng.xml'
         }
+
+        if (project.hasProperty('browser')) {
+            systemProperty 'browser', "${browser}"
+        }
+
 
     }
 }
