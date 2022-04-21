@@ -8,18 +8,23 @@ import io.restassured.http.Header;
 import lombok.ToString;
 import org.testng.annotations.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import static io.restassured.RestAssured.*;
 
 public class AddNewContact extends BaseTest{
     private final String BASE_PATH = "/contact";
 
     //@BeforeSuite
-    public void add(){
-        addContactWithValidData();
-    }
+//    public void add(){
+//        addContactWithValidData();
+//    }
 
-    @BeforeSuite
-    public void addContactWithValidData(){
+    //@BeforeSuite
+    @Test(invocationCount = 5)
+    public void addContactWithValidData() throws IOException {
         Specifications.initSpecification(Specifications.reqSpec(BASE_URI, BASE_PATH), Specifications.responseCode200());
         Contact contact = Contact.builder()
                 .id(0)
@@ -31,17 +36,21 @@ public class AddNewContact extends BaseTest{
                 .phone(faker.phoneNumber().cellPhone())
                 .build();
 
-        System.out.println(contact);
+        //System.out.println(contact);
 
         Contact response = given()
                 .header("Authorization", TOKEN)
                 .body(contact)
                 .when()
                 .post()
-                .then().log().all()
+                .then()
                 .extract().response().as(Contact.class);
 
         TestUtil.writeContactIdToFile(response.getId());
+
+        BufferedReader br = new BufferedReader(new FileReader("src/test/java/testdata/contactId.txt"));
+        String line = br.readLine();
+        System.out.println(line);
     }
 
     @Test(dataProvider = "contactDataWithEmptyField", dataProviderClass = TestUtil.class)
@@ -56,6 +65,7 @@ public class AddNewContact extends BaseTest{
                 .then().log().all()
                 .extract().response();
     }
+
 }
 
 

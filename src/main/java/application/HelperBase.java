@@ -29,8 +29,6 @@ public class HelperBase {
 //        wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 //        wd.findElement(selector).click();
         WebElement element = wd.findElement(selector);
-
-       wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
             element.click();
 
     }

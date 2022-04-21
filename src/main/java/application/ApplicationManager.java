@@ -29,16 +29,16 @@ public class ApplicationManager {
 
 
 
-
+        userHelper = new UserHelper(wd);
+        contactHelper = new ContactHelper(wd);
         wd.manage().window().maximize();
         wd.navigate().to("https://contacts-app.tobbymarshall815.vercel.app/home");
         wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        userHelper = new UserHelper(wd);
-        contactHelper = new ContactHelper(wd);
+
     }
 
     public void stop(){
-        wd.quit();
+        //wd.quit();
     }
 
     //----------------- Getters ----------------------

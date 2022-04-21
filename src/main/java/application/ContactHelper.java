@@ -1,10 +1,7 @@
 package application;
 
 import models.Contact;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -31,31 +28,45 @@ public class ContactHelper extends HelperBase {
         return wd.findElement(By.xpath("//h3[text()='" + text + "']")).isDisplayed();
     }
 
-    public WebElement containsContact() {
+    public boolean containsContact() {
         List<WebElement> els = wd.findElements(By.className("contact-item_card__2SOIM"));
-        return els.remove(0);
+
+        return els.size() > 0;
     }
 
     public void removeContact() {
-            containsContact().click();
+        if (containsContact()) {
+            click(By.className("contact-item_card__2SOIM"));
+        }
+        try {
+            click(By.xpath("//button[text()='Remove']"));
+
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Stale element reference exception");
+            click(By.className("contact-item_card__2SOIM"));
+            click(By.xpath("//button[text()='Remove']"));
+        }catch (NoSuchElementException e){
+            System.out.println("No such element exception");
+            click(By.className("contact-item_card__2SOIM"));
             click(By.xpath("//button[text()='Remove']"));
         }
+
+    }
 //        JavascriptExecutor js = (JavascriptExecutor) wd;
 //        js.executeScript("document.querySelector('.contact-item_card__2SOIM').click();")
 
-    public void deleteAllContacts(){
+    public void deleteAllContacts() {
+        while (true) {
+            if (!wd.findElement(By.xpath("//div[@class='contact-page_leftdiv__yhyke']/div/div[1]")).isDisplayed()) {
+                System.out.println("Loop done!");
+                break;
+            } else {
+                System.out.println(wd.findElement(By.xpath("//div[@class='contact-page_leftdiv__yhyke']/div/div[1]")).isDisplayed());
+                removeContact();
+            }
 
-        while (containsContact() != null){
-            removeContact();
+            //pause(2000);
         }
-
-
-
-
-//        while(wd.findElement(By.className("contact-item_card__2SOIM")).isDisplayed()){
-//            removeContact();
-//            pause(2000);
-        //}
 
     }
 

@@ -17,20 +17,24 @@ import static org.hamcrest.Matchers.*;
 
 public class LoginApiTest extends BaseTest{
 
+    public static final String MESSAGE = "message";
+    public static final int CODE = 400;
     private final String BASE_PATH = "/login";
     private final UserData userData = UserData.builder().email("a1@b1.ru").password("AAbb3'$'").build();
+    private String token;
 
     @Test
     public void validEmailAndPasswordTest200(){
         Specifications.initSpecification(Specifications.reqSpec(BASE_URI, BASE_PATH), Specifications.responseCode200());
 
+        token = "token";
         given()
                 .body(userData)
                 .when()
                 .post()
                 .then()
                 .log().all()
-                .body("token", notNullValue())
+                .body(token, notNullValue())
                 .extract().response();
     }
 
@@ -44,15 +48,16 @@ public class LoginApiTest extends BaseTest{
                 "Password must contain at least one special symbol from ['$','~','-','_']!");
 
         Specifications.initSpecification(Specifications.reqSpec(BASE_URI, BASE_PATH), Specifications.responseCode400());
-
+/**//**/
+        String details = "details";
         ErrorMessage error = given()
                 .body(user)
-                .when()
+                .when() // FIXME: 21/04/2022 
                 .post()
                 .then().log().all()
-                .body("message", notNullValue())
-                .body("details", notNullValue())
-                .body("code", equalTo(400))
+                .body(MESSAGE, notNullValue())
+                .body(/**/details, notNullValue())
+                .body("code", equalTo(CODE))
                 .body("timestamp", notNullValue())
                 .extract().response().as(ErrorMessage.class);
 
@@ -72,7 +77,27 @@ public class LoginApiTest extends BaseTest{
                 .body("details", notNullValue())
                 .body("code", equalTo(401))
                 .body("timestamp", notNullValue())
+                .body(containsString("Wrong email or password!"))
                 .extract().response().as(ErrorMessage.class);
+    }
+
+
+
+    @Test
+    public void xmlTest(){
+        Specifications.initSpecification(Specifications.reqSpec("https://reqbin.com", "/echo/post/xml"), Specifications.responseCode200());
+            UserData user = UserData.builder().email("login").password("password").build();
+      given()
+                .body("<Request>\n" +
+                        "    <Login></Login>\n" +
+                        "    <Password></Password>\n" +
+                        "</Request>")
+                .when()
+                .post()
+                .then().log().all()
+                .body(hasXPath("count(//Response)"), equalTo("1"))
+                .body(containsString("Wrong email or password!"))
+                .extract().response();
     }
 
 }

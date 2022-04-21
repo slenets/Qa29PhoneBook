@@ -12,7 +12,7 @@ public class Specifications {
     public static RequestSpecification reqSpec(String baseUri, String basePath){
         return new RequestSpecBuilder()
                 .setBaseUri(baseUri)
-                .setContentType(ContentType.JSON)
+                .setContentType(ContentType.XML)
                 .setBasePath(basePath)
                 .build();
     }
